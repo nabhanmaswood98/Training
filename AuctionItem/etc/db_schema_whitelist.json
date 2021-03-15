@@ -1,0 +1,16 @@
+{
+    "rp_auction_items": {
+        "column": {
+            "entity_id": true,
+            "item_name": true,
+            "item_sku": true,
+            "item_base_auction_price": true,
+            "item_owner_email": true,
+            "created_at": true,
+            "modified_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

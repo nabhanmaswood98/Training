@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SomethingDigital_AuctionItem::grid_title" title="Auction Item" translate="title" module="SomethingDigital_AuctionItem" parent="Magento_Backend::content" sortOrder="50" dependsOnModule="SomethingDigital_AuctionItem" resource="SomethingDigital_AuctionItem::grid"/>
+        <add id="SomethingDigital_AuctionItem::grid" title="Auction Item Grid" translate="title" module="SomethingDigital_AuctionItem" parent="SomethingDigital_AuctionItem::grid_title" sortOrder="10" dependsOnModule="SomethingDigital_AuctionItem" action="rp_auction/index/index" resource="SomethingDigital_AuctionItem::grid"/>
+    </menu>
+</config>

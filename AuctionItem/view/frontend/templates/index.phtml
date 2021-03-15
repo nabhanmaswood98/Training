@@ -1,0 +1,45 @@
+<?php
+$viewModel = $block->getViewModel();
+$auctionItems = $viewModel->getAllAuctionItems();
+?>
+<h2>Auction Items</h2>
+<table class="table" id="contact-table">
+    <thead>
+    <tr>
+        <th scope="col" class="col"><?= __('ID'); ?></th>
+        <th scope="col" class="col"><?= __('Item Name'); ?></th>
+        <th scope="col" class="col"><?= __('Item Sku'); ?></th>
+        <th scope="col" class="col"><?= __('Item Base Auction Price'); ?></th>
+        <th scope="col" class="col"><?= __('Item Owner Email'); ?></th>
+        <th scope="col" class="col"><?= __('Created At'); ?></th>
+        <th scope="col" class="col"><?= __('Modified At'); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($auctionItems as $auctionItem):?>
+        <tr>
+            <td data-th="ID" class="col">
+                <?= $auctionItem->getEntityId() ?>
+            </td>
+            <td data-th="First Name" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getItemName()) ?>
+            </td>
+            <td data-th="Last Name" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getItemSku()) ?>
+            </td>
+            <td data-th="Email" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getItemBaseAuctionPrice()) ?>
+            </td>
+            <td data-th="Message" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getItemOwnerEmail()) ?>
+            </td>
+            <td data-th="Message" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getCreatedAt()) ?>
+            </td>
+            <td data-th="Message" class="col">
+                <?= $escaper->escapeHtml($auctionItem->getModifiedAt()) ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

@@ -1,0 +1,21 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="rp_auction_items">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false"
+                identity="true" comment="Auction Item ID"/>
+        <column xsi:type="varchar" name="item_name" nullable="false"
+                length="255" comment="Auction Item Name"/>
+        <column xsi:type="varchar" name="item_sku" nullable="true"
+                length="255" comment="Auction Item Sku"/>
+        <column xsi:type="decimal" name="item_base_auction_price" unsigned="true"
+                nullable="false" comment="Auction Item Price"/>
+        <column xsi:type="varchar" name="item_owner_email" length="255"
+                comment="Auction Item Owner Email"/>
+        <column xsi:type="datetime" name="created_at"
+                comment="Auction Item create date"/>
+        <column xsi:type="datetime" name="modified_at"
+                comment="Auction Item modified date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>

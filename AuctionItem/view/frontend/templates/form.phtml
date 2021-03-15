@@ -1,0 +1,36 @@
+<h2><?= __('New Auction Item'); ?></h2>
+<form class="form" action="<?= $this->getUrl('auction/request/post'); ?>" id="contact-form" method="post" data-mage-init='{"validation":{}}'>
+    <fieldset class="fieldset">
+        <div class="field name required">
+            <label class="label" for="item-name"><span><?= __('Item Name'); ?></span></label>
+            <div class="control">
+                <input name="item-name" id="item-name" title="Item Name" value=""  class="input-text" type="text" required="true"/>
+            </div>
+        </div>
+        <div class="field name">
+            <label class="label" for="item-sku"><span><?= __('Item Sku'); ?></span></label>
+            <div class="control">
+                <input name="item-sku" id="item-sku" title="Item Sku" value="" class="input-text" type="text"/>
+            </div>
+        </div>
+        <div class="field name required">
+            <label class="label" for="item-base-auction-price"><span><?= __('Item Base Auction Price'); ?></span></label>
+            <div class="control">
+                <input name="item-base-auction-price" id="item-base-auction-price" title="Item Base Auction Price" value="" type="text" class="input-text" data-validate='{"required":true, "validate-greater-than-zero":true}'/>
+            </div>
+        </div>
+        <div class="field name required">
+            <label class="label" for="item-owner-email"><span><?= __('Item Owner Email'); ?></span></label>
+            <div class="control">
+                <input name="item-owner-email" id="item-owner-email" title="Item Owner Email" value="" type="text" class="input-text" data-validate='{"required":true, "validate-emails":true}'/>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" title="Submit" class="action submit primary">
+                <span><?= __('Submit'); ?></span>
+            </button>
+        </div>
+    </div>
+</form>
