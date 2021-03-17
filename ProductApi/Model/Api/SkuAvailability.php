@@ -3,9 +3,11 @@
 namespace SomethingDigital\ProductApi\Model\Api;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink;
+use Magento\InventoryApi\Api\GetStockSourceLinksInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventorySalesApi\Api\GetProductSalableQtyInterface;
 use SomethingDigital\ProductApi\Api\SkuAvailabilityInterface;
 
 /**
@@ -31,20 +33,27 @@ class SkuAvailability implements SkuAvailabilityInterface
     protected $filterBuilder;
 
     /**
-     * @var FilterGroupBuilder
+     * @var GetStockSourceLinksInterface
      */
-    protected $filterGroupBuilder;
+    protected $getStockSourceLinks;
+
+    /**
+     * @var GetProductSalableQtyInterface
+     */
+    protected $getProductSalableQty;
 
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder
+        GetStockSourceLinksInterface $getStockSourceLinks,
+        GetProductSalableQtyInterface $getProductSalableQty
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->filterGroupBuilder = $filterGroupBuilder;
+        $this->getStockSourceLinks = $getStockSourceLinks;
+        $this->getProductSalableQty = $getProductSalableQty;
     }
 
     /**
@@ -54,16 +63,6 @@ class SkuAvailability implements SkuAvailabilityInterface
         $sku,
         $storeSourceCode
     ) {
-        $skuFilter = $this->filterBuilder
-            ->setField('sku')
-            ->setConditionType('eq')
-            ->setValue($sku)
-            ->create();
-
-        $filterGroup1 = $this->filterGroupBuilder
-            ->setFilters([$skuFilter])
-            ->create();
-
         $sourceCodeFilter = $this->filterBuilder
             ->setField('source_code')
             ->setConditionType('eq')
@@ -76,29 +75,30 @@ class SkuAvailability implements SkuAvailabilityInterface
             ->setValue('default')
             ->create();
 
-        $filterGroup2 = $this->filterGroupBuilder
-            ->setFilters([$sourceCodeFilter, $defaultCodeFilter])
-            ->create();
-
-        $this->searchCriteriaBuilder->setFilterGroups([$filterGroup1, $filterGroup2]);
+        $this->searchCriteriaBuilder->addFilters([$sourceCodeFilter, $defaultCodeFilter]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        $stockSourceLinks = $this->getStockSourceLinks->execute($searchCriteria)->getItems();
 
-        return $this->mapSourceItems($sourceItems);
+        return $this->mapSourceToQuantity($sku, $stockSourceLinks);
     }
 
     /**
-     * Maps each SourceItem's source_code to its quantity
+     * Maps the source code to the sku's salable quantity
      *
-     * @param SourceItem[] $storeSourceCode
+     * @param string $sku
+     * @param StockSourceLink[] $stockSourceLinks
      * @return array
      */
-    private function mapSourceItems($sourceItems)
+    private function mapSourceToQuantity($sku, $stockSourceLinks)
     {
         $mappedSourceItems = [];
-        foreach ($sourceItems as $sourceItem) {
-            $mappedSourceItems[$sourceItem->getSourceCode()] = $sourceItem->getQuantity();
+        foreach ($stockSourceLinks as $stockSourceLink) {
+            $stockId = $stockSourceLink->getStockId();
+            if ($stockId && $sku) {
+                $salableQty = $this->getProductSalableQty->execute($sku, $stockId);
+                $mappedSourceItems[$stockSourceLink->getSourceCode()] = $salableQty;
+            }
         }
         return $mappedSourceItems;
     }
