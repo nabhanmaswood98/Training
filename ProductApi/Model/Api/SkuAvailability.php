@@ -6,13 +6,15 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Psr\Log\LoggerInterface;
 use SomethingDigital\ProductApi\Api\SkuAvailabilityInterface;
 
+/**
+ * Class to retrieve the Quantity Available for a Product
+ *
+ * Class SkuAvailability
+ */
 class SkuAvailability implements SkuAvailabilityInterface
 {
-    protected $logger;
-
     /**
      * @var SourceItemRepository
      */
@@ -34,13 +36,11 @@ class SkuAvailability implements SkuAvailabilityInterface
     protected $filterGroupBuilder;
 
     public function __construct(
-        LoggerInterface $logger,
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder
     ) {
-        $this->logger = $logger;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
