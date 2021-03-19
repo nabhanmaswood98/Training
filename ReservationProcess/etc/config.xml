@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+            <cataloginventory>
+                <reservation>
+                    <prevent_open_reservations>0</prevent_open_reservations>
+                    <prevent_closed_reservations>1</prevent_closed_reservations>
+                </reservation>
+            </cataloginventory>
+    </default>
+</config>
