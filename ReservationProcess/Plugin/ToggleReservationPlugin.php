@@ -4,7 +4,6 @@ namespace SomethingDigital\ReservationProcess\Plugin;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\InventorySalesApi\Api\PlaceReservationsForSalesEventInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Plugin class to intercept PlaceReservationsForSalesEventInterface
@@ -32,8 +31,26 @@ class ToggleReservationPlugin
     public function aroundExecute(
         PlaceReservationsForSalesEventInterface $subject,
         callable $proceed,
+        array $items,
         ...$args
     ) {
-        $proceed(...$args);
+        $preventOpenReservation = true;
+        $preventClosedReservation = true;
+
+        if ($preventOpenReservation && $preventClosedReservation) {
+            return;
+        }
+
+        if ($preventOpenReservation) {
+            $items = array_filter($items, function ($item) {
+                return $item->getQuantity() > 0;
+            });
+        } elseif ($preventClosedReservation) {
+            $items = array_filter($items, function ($item) {
+                return $item->getQuantity() < 0;
+            });
+        }
+
+        $proceed($items, ...$args);
     }
 }
